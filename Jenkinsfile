@@ -4,14 +4,14 @@ pipeline {
 
     stages {
         stage('SCM Checkout'){
-          git 'https://github.com/prakashk0301/jenkins-example'
+          git 'https://github.com/uttamrao/jenkins-example.git'
         }
   }
     {
         stage ('Compile Stage') {
 
             steps {
-                withMaven(maven : 'LocalMaven') {
+                withMaven(maven : 'localmaven') {
                     sh 'mvn clean compile'
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
         stage ('Testing Stage') {
 
             steps {
-                withMaven(maven : 'LocalMaven') {
+                withMaven(maven : 'localmaven') {
                     sh 'mvn test'
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
 
         stage ('install Stage') {
             steps {
-                withMaven(maven : 'LocalMaven') {
+                withMaven(maven : 'localmaven') {
                     sh 'mvn install'
                 }
             }
@@ -37,8 +37,8 @@ pipeline {
 
          stage ('deploy to tomcat') {
              steps {
-                 sshagent(['c4314358-27ee-4704-859a-44ddcb0fc88b']) {
-                 sh 'scp -o StrictHostKeyChecking=no target/*.jar ec2-user@172.31.42.125:/var/lib/tomcat/webapps/'
+                 sshagent(['tomcat']) {
+                 sh 'scp -o StrictHostKeyChecking=no target/*.jar ec2-user@172.31.40.139:/var/lib/tomcat/webapps/'
       }
              }
    }
